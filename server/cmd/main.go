@@ -1,13 +1,12 @@
 package main
 
 import (
-	db "github.com/akrawat667/baseChat/server"
+	"github.com/akrawat667/baseChat/server/db"
 	"github.com/akrawat667/baseChat/server/internal/user"
 	"github.com/akrawat667/baseChat/server/router"
 )
 
 func main() {
-
 	dbObj := db.NewDatabase().GetDB()
 	repoObj := user.NewRepository(dbObj)
 	serviceObj := user.NewService(repoObj)
