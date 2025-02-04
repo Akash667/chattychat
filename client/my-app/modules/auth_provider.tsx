@@ -1,4 +1,6 @@
-import { createContext, useState } from 'react'
+"use client"
+import { useRouter } from 'next/navigation'
+import { createContext, useEffect, useState } from 'react'
 
 export type UserInfo = {
     username: string
@@ -17,12 +19,38 @@ export const AuthContext = createContext<
         }
     )
 
-const AuthContextProvider = ({ children: React.ReactNode }) => {
+const AuthContextProvider = ({ children }: { children: React.ReactNode }) => {
 
     const [authenticated, setAuthenticated] = useState(false)
     const [user, setUser] = useState<UserInfo>({ username: '', id: '' })
+
+    const router = useRouter()
+
+    useEffect(() => {
+        const userInfo = localStorage.getItem('user_info')
+        if (!userInfo) {
+
+            if (window.location.pathname != '/signup') {
+                router.push('/login')
+                return
+            }
+        } else {
+            const user: UserInfo = JSON.parse(userInfo)
+            if (user) {
+
+                setUser({
+                    username: user.username,
+                    id: user.id
+                })
+            }
+
+            setAuthenticated(true)
+        }
+    }, [authenticated])
     return (
-        <div>AuthContextProvider</div>
+        <AuthContext.Provider value={{ authenticated: authenticated, setAuthenticated: setAuthenticated, user: user, setUser: setUser }}>
+            {children}
+        </AuthContext.Provider>
     )
 }
 

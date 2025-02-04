@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
-
+import AuthContextProvider from "@/modules/auth_provider";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -14,10 +14,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body
-        className="flex flex-col md:flex-row h-full min-h-screen font-sans"
-      >
+      <body    className="flex flex-col md:flex-row h-full min-h-screen font-sans">
+      <AuthContextProvider>
         {children}
+      </AuthContextProvider>
       </body>
     </html>
   );

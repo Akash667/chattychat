@@ -1,19 +1,28 @@
-'use client'
 
-import React, {useState} from 'react'
+"use client"
+
+import React, {useContext, useEffect, useState} from 'react'
 import { API_URL } from '../../constants'
 import { useRouter } from 'next/navigation'
-import { UserInfo } from '@/modules/auth_provider'
+import { AuthContext , UserInfo } from '@/modules/auth_provider'
 
 
 const Page = () => {
 
   const [email , setEmail] = useState('')
   const [password , setPassword] = useState('')
-
+  const { authenticated } = useContext(AuthContext)
   const router = useRouter()
 
+  useEffect(() => {
+    if (authenticated){
+      router.push('/')
+      return
+    }
+  },[authenticated])
+
   const submitHandler = async ( e: React.SyntheticEvent) => {
+     e.preventDefault()
       try{
         const res = await fetch(`${API_URL}/login`, {
           method:"POST",
@@ -30,9 +39,9 @@ const Page = () => {
             id: data.id
           }
           localStorage.setItem('user_info', JSON.stringify(user))
+          return router.push('/')
         }
 
-        return router.push('/')
 
       }catch(err){
         console.log(err)
@@ -40,6 +49,7 @@ const Page = () => {
   }
 
   return (
+
     <div className="flex items-center justify-center min-w-full min-h-screen">
         <form className="flex flex-col md:w-1/5">
             <div className='text-3xl font-bold text-center'>
@@ -57,6 +67,7 @@ const Page = () => {
             >Login</button>
         </form>
     </div>
+
   )
 }
 
