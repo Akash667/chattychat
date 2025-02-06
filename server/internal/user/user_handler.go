@@ -1,6 +1,7 @@
 package user
 
 import (
+	"log"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -22,12 +23,15 @@ func (h *Handler) CreateUser(c *gin.Context) {
 	var u UserCreateReq
 	if err := c.ShouldBindJSON(&u); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": c.Params.ByName("username")})
+		log.Println("Error occured during binding create request")
 		return
 	}
+	log.Println(u.Email)
 
 	res, err := h.Service.CreateUser(c.Request.Context(), &u)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		log.Println("Error occured during executing create request")
 		return
 	}
 
@@ -38,6 +42,7 @@ func (h *Handler) LoginUser(c *gin.Context) {
 
 	var u LoginUserReq
 	if err := c.ShouldBindJSON(&u); err != nil {
+		log.Println("Error occured during binding login info", err)
 		c.JSON(http.StatusBadRequest, gin.H{"error": c.Params.ByName("email")})
 		return
 	}
@@ -45,6 +50,7 @@ func (h *Handler) LoginUser(c *gin.Context) {
 	user, err := h.Service.LoginUser(c.Request.Context(), &u)
 
 	if err != nil {
+		log.Println("Error occured during loggin in user", err)
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}

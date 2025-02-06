@@ -3,6 +3,7 @@ package router
 import (
 	"github.com/akrawat667/baseChat/server/internal/user"
 	"github.com/akrawat667/baseChat/server/internal/ws"
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 )
 
@@ -10,6 +11,8 @@ var r *gin.Engine
 
 func InitRouter(userHandler *user.Handler, wsHandler *ws.Handler) {
 	r = gin.Default()
+	r.Use(cors.Default())
+	r.Use(gin.Logger())
 	gin.SetMode(gin.DebugMode)
 	r.POST("/signup", userHandler.CreateUser)
 	r.POST("/login", userHandler.LoginUser)

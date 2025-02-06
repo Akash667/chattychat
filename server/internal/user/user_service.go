@@ -2,6 +2,7 @@ package user
 
 import (
 	"context"
+	"log"
 	"strconv"
 
 	"github.com/akrawat667/baseChat/server/utils"
@@ -56,10 +57,12 @@ func (s *service) LoginUser(ctx context.Context, req *LoginUserReq) (*LoginUserR
 
 	user, err := s.Repository.GetUser(ctx, req.Email)
 	if err != nil {
+		log.Println("Error while fetching user from db", err)
 		return &LoginUserRes{}, err
 	}
 
 	if !utils.ComparePassword(user.Password, req.Password) {
+		log.Println("wrong password", err)
 		return &LoginUserRes{}, &WrongPassword{}
 	}
 
@@ -73,6 +76,7 @@ func (s *service) LoginUser(ctx context.Context, req *LoginUserReq) (*LoginUserR
 
 	accessToken, err := token.SignedString([]byte(secretkey))
 	if err != nil {
+		log.Println("cant sign access token", err)
 		return &LoginUserRes{}, err
 	}
 
