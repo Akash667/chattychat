@@ -1,6 +1,7 @@
 package ws
 
 import (
+	"log"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -33,7 +34,8 @@ func (h *Handler) CreateRoom(c *gin.Context) {
 		ID:      req.ID,
 		Name:    req.Name,
 		Clients: make(map[string]*Client)}
-
+	log.Println(req.ID)
+	log.Println(req.Name)
 	c.JSON(http.StatusOK, req)
 }
 

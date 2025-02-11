@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import AuthContextProvider from "@/modules/auth_provider";
+import WebSocketProvider from "@/modules/websocket_provider";
+
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -16,7 +18,9 @@ export default function RootLayout({
     <html lang="en">
       <body    className="flex flex-col md:flex-row h-full min-h-screen font-sans">
       <AuthContextProvider>
+        <WebSocketProvider>
         {children}
+        </WebSocketProvider>
       </AuthContextProvider>
       </body>
     </html>

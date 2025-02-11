@@ -1,41 +1,75 @@
 'use client'
-import { stringify } from 'querystring'
-import React, { useState } from 'react'
+import React, { useEffect, useState, useContext } from 'react'
 import { v4 as uuidv4 } from 'uuid'
+import { useRouter } from 'next/navigation'
 import { API_URL } from '@/constants'
+import { WEBSOCKET_URL } from '@/constants'
+import { AuthContext } from '@/modules/auth_provider'
+import { WebSocketContext } from '@/modules/websocket_provider'
 
-const index = () => {
+const Index = () => {
 
-  const [rooms, setRooms] = useState<{ id: string, name: string }[]>([
-    { id: '1', name: 'room1' },
-    { id: '2', name: 'room2' },
-    { id: '3', name: 'room3' },
-  ])
+  const [rooms, setRooms] = useState<{ id: string, name: string }[]>([])
 
   const [roomName, setRoomName] = useState('')
+  const router = useRouter()
+  const {user} = useContext(AuthContext)
+  const {conn, setConn} = useContext(WebSocketContext)
+  const getRooms = async () => {
 
+    try {
+      const res = await fetch(`${API_URL}/ws/getRooms`, {
+        method: 'GET',
+      })
+
+      const data = await res.json()
+      console.log(data)
+      if (res.ok) {
+              setRooms(data)
+      }
+    } catch (err) {
+      console.log(err)
+    }
+
+  }
+
+  const joinRoom = (roomId: string) =>{
+
+    const ws = new WebSocket(`${WEBSOCKET_URL}/ws/joinRoom/${roomId}?id=${user.id}&username=${user.username}`)
+    if(ws.OPEN){
+      setConn(ws)
+      router.push('/app')
+    }
+
+
+
+  }
+
+  useEffect(() => {
+    getRooms()
+  }, [])
 
 
   const submitHandler = async (e: React.SyntheticEvent) => {
     e.preventDefault()
 
     try {
-        setRoomName('')
-        const res = await fetch(`${API_URL}/ws/createRoom`,{
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          credentials: 'include',
-          body: JSON.stringify({
-            id: uuidv4(),
-            name: roomName
-          })
+      setRoomName('')
+      const res = await fetch(`${API_URL}/ws/createRoom`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        credentials: 'include',
+        body: JSON.stringify({
+          id: uuidv4(),
+          name: roomName
         })
+      })
 
-        if (res.ok){
-          
-        }
+      if (res.ok) {
+        getRooms()
+      }
     } catch (error) {
       console.log(error)
     }
@@ -81,4 +115,4 @@ const index = () => {
   )
 }
 
-export default index
+export default Index
