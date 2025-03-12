@@ -40,9 +40,6 @@ const Index = () => {
       setConn(ws)
       router.push('/app')
     }
-
-
-
   }
 
   useEffect(() => {
