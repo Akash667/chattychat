@@ -1,0 +1,17 @@
+1|eseteban|besteban@este.xyz|$2a$10$FAOO2RrnIP2rlIaxtsOvWOdILBQ51Df7pyg6QxSHjEMyg3PRNqKCe
+2||akash@123.com|$2a$10$aGuYwoeqEG3zwB04G6XJPejEuxtAAiLlK5aCSOv41xksN9hDBGpnm
+3|eseteban|besteban@este.xyz|$2a$10$0pU.93a6VpcjRl4ClWcorec2yQyNfMUbY05mDdl.9qh.9xSPhQkOa
+
+
+"username": "ak@ak.com",
+"password": "12345"
+
+
+"email": "ak@ak.com",
+"username": "ak",
+"password": "12345"
+
+
+    "email": "ak1@ak.com",
+    "username": "ak1",
+    "password": "12345"

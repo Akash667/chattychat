@@ -50,7 +50,7 @@ var upgrader = websocket.Upgrader{
 func (h *Handler) JoinRoom(c *gin.Context) {
 	conn, err := upgrader.Upgrade(c.Writer, c.Request, nil)
 	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error() + "upgrading to websocket failed"})
 		return
 	}
 	roomID := c.Param("roomId")
