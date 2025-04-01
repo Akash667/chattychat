@@ -50,7 +50,7 @@ const Page = () => {
         console.log('data fetched in getUsers: ' + JSON.stringify(data))
         setUsers(data)
       } catch (e) {
-        console.log("error fetching users"+ e)
+        console.log("error fetching users" + e)
       }
     }
     getUsers()
@@ -60,7 +60,7 @@ const Page = () => {
 
   useEffect(() => {
     console.log('useEffect triggered as state changed')
-    console.log('current list of messages is as follows'+messages)
+    console.log('current list of messages is as follows' + messages)
     if (textarea.current) {
       autosize(textarea.current)
       console.log('autosize triggered')
@@ -118,6 +118,22 @@ const Page = () => {
   }
   return (
     <div className='flex flex-col w-full'>
+
+
+      <div className='absolute top-4 right-4'>
+        <button
+          className='p-2 rounded-md bg-red-500 text-blue hover:bg-red-600'
+          onClick={() => {
+            // Clear user session and redirect to login page
+            localStorage.removeItem('user_info')
+            router.push('/');
+          }}
+        >
+          Logout
+        </button>
+      </div>
+
+
       <div className='p-4 md:mx-6 mb-14' >
         <ChatBody data={messages} />
       </div>
