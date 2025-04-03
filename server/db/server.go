@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"path/filepath"
+	"runtime"
 
 	_ "github.com/lib/pq"
 	_ "github.com/mattn/go-sqlite3"
@@ -17,14 +19,18 @@ type dbObject struct {
 func NewDatabase() *dbObject {
 
 	// connStr := "user=root password=mysecretpassword host=localhost port=5433 sslmode=disable"
+	_, filePath, _, _ := runtime.Caller(0)
+	dir := filepath.Dir(filePath)
+	dbPath := filepath.Join(dir, "basechat.db")
+	fmt.Println("Database path:", dbPath)
 
-	db, err := sql.Open("sqlite3", "./basechat.db")
+	db, err := sql.Open("sqlite3", dbPath)
 
 	if err != nil {
 		fmt.Println(err)
 	}
 
-	sqlBytes, err := os.ReadFile("/home/akash/akrawat/baseChat/server/db/migrations/20241212192608_add_users_table.up.sql")
+	sqlBytes, err := os.ReadFile(dir + "/migrations/20241212192608_add_users_table.up.sql")
 	if err != nil {
 		fmt.Println("migration failed", err)
 	}
